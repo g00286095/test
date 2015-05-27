@@ -1,0 +1,904 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/js/angular/angular-resource.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es&sensor=true"></script>
+    <script src="cordova.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  </head>
+  <body ng-app="starter" ng-controller="MapCtrl">
+  <ion-view>
+	<ion-side-menus>
+		<ion-side-menu-content>
+			<ion-header-bar>
+			  <div class="buttons">
+				<button class="button icon button-clear ion-navicon-round" ng-click="toggleLeft()"></button>
+			  </div>
+			  <h1 class="title">Waterway Walks</h1>
+			   <div class="buttons">
+				<button ng-class="hidden_refresh" class="button icon button-clear ion-refresh" ng-click="refreshButton()"></button>
+			  </div>
+			</ion-header-bar>
+			<ion-content scroll="false" class="has-header">
+				<map data-tap-disabled="true" on-create="mapCreated(map)"></map>
+				<div class="button-bar">
+					<a class="button button-balanced button-green" ng-click="showRoute1()"></a>
+					<a class="button button-assertive button-red" ng-click="showRoute2()"></a>
+					<a class="button button-positive button-blue" ng-click="showRoute3()"></a>
+				</div>
+				<div class="item item-avatar">
+					<img src="img/{{imagewalk}}.png">
+					<h2>{{number}}</h2>
+					<p>{{totalDistance}}</p>
+				</div>
+				<div class="item item-avatar" ng-class="hidden">
+					<a class="button icon ion-refresh button-balanced av-button" ng-click="distanceFromMe();" ng-class="refresh_button_class"></a>
+					<h2>Distance From Me:</h2>
+					<p>{{distance}}</p>
+				</div>
+				<div class="button-content" ng-class="hidden">
+					<button ng-click="startWalk1();" ng-class="startWalk1Button" class="button button-balanced button-green2">
+						Start Walk
+					</button>
+					<button ng-click="startWalk2();" ng-class="startWalk2Button" class="button button-balanced button-red2">
+						Start Walk
+					</button>
+					<button ng-click="startWalk3();" ng-class="startWalk3Button" class="button button-balanced button-blue2">
+						Start Walk
+					</button>
+				</div>
+				<div style="height:15px;"></div>
+			</ion-content>		
+		</ion-side-menu-content>
+
+		<!--SIDE MENU-->
+		<ion-side-menu side="left">
+			<div class="bar bar-header bar-stable">
+				<h1 class="title">Side-Menu</h1>
+			</div>
+			<ion-content class="has-header">
+				<ion-list>
+					<ion-toggle class="item item-toggle" ng-model="showLocation.checked" ng-change="showLocationToggle(); toggleLeft();">
+						Show My Location
+						<label class="toggle toggle-assertive">
+					   <input type="checkbox">
+					   <div class="track">
+						 <div class="handle"></div>
+					   </div>
+					   </label>
+					</ion-toggle>
+					<ion-toggle ng-class="hidden" class="item item-toggle" ng-model="direcctionsToStart.checked" ng-change="direcctionsToStartToggle(); toggleLeft();">
+						Show Directions To Start
+						<label class="toggle toggle-assertive">
+					   <input type="checkbox">
+					   <div class="track">
+						 <div class="handle"></div>
+					   </div>
+					   </label>
+					</ion-toggle>
+					<ion-toggle class="item item-toggle" ng-model="showLandmarks.checked" ng-change="showLandmarksToggle(); toggleLeft();">
+						Show Landmarks
+						<label class="toggle toggle-calm">
+					   <input type="checkbox">
+					   <div class="track">
+						 <div class="handle"></div>
+					   </div>
+					   </label>
+					</ion-toggle>
+				</ion-list>
+			</ion-content>
+		</ion-side-menu>	
+	</ion-side-menus>
+	
+	
+	<!--POP UP-->
+	<div id="LoginBackgroundPopup" ng-class="popUpLayer"></div>
+	
+	<!--WALK 1-->
+	<div  class="map-popup" ng-class="popUpWalk1">
+		<ion-slide-box on-slide-changed="slideHasChanged($index)" style="padding-bottom:40px;" ng-class="popUpWalk1;">
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 1 of 6</p>
+					</div>
+					<div class="item item-divider">
+						Museum to O'Brien's Bridge
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p1.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<p>
+						<img class="full-image" src="img/newsparch.jpg">
+							Starting outside the modern Galway City Museum the first 
+							thing we notice before embarking on our walk is the remains of 
+							the city’s medieval walls. The walls surrounded the city, 
+							protecting it from attack as the fourteen families or ‘Tribes’ of Galway held political and 
+							commercial sway within their confines. 
+						</p>
+						<img class="full-image" src="img/museum.jpg">
+						<p>
+							As we pass through the 
+							sixteenth century extension to the city walls known as the ‘Spanish
+							Arch’, we find ourselves in an open area which once acted as the medieval quays where 
+							French and Spanish galleons docked with their cargoes of wines, 
+							spices and silks. In later years it came to be the location of the city’s Fishmarket. 
+						</p>
+						<img class="full-image" src="img/oldsparch.jpg">
+						<p>
+							To our left we see the Fisheries Tower which was constructed in 1853 and restored by the Galway Civic 
+							Trust in 1999. Originally a draft netting station, this unique building also served as a look-out
+							tower to monitor fish stocks as well as illegal fishing activity along the river. 
+						</p>
+						<img class="full-image" src="img/fisheries.jpg">
+						<p>
+							The foot of the fishery tower is often a good location for spotting congregating birds such as mallards and 
+							grey herons. The common sandpiper can also be seen along the river in summer when the river is at its lowest.
+							Low water is also a good time to view lower aquatic plants which include the jelly-like alga, nostoc and tufted
+							green cladophora. Shoals of mullet make their way upstream during low flow, as does the strange eel-like 
+							parasitic fish, the lamprey. The diminutive dipper bird, on the other hand, is commonly evident during winter 
+							and spring high water. Black-headed gulls and grey wagtails are some of the many other birds which can be spotted 
+							along the river.
+							We now make our way up the riverside walk known as Bruach na Coiribe (the Bank of the Corrib), along the side of the hotel.
+						</p>
+						<img class="full-image" src="img/bruach2.jpg">
+						<p>
+							From here we get a good view of the River Corrib as it makes its final journey towards the Atlantic Ocean. On a particularly rain-soaked visit to Galway 
+							in 1842, William Makepeace Thackeray, author of Vanity Fair, described the river in full torrent and also the curiosity of local washerwomen:
+							<p style="font-style:italic">
+							‘The waters of Lough Corrib, which ‘permeate’ under the bridges of the town, go rushing and roaring to the sea with a noise and eagerness only known in Galway; and along 
+							the banks you see all sorts of strange figures washing all sorts of wonderful rags, with red petticoats and redder shanks standing in the stream.’
+							</p>
+						</p>
+						<p>
+							It is worth noting at this point that the river was originally known by the Gaelic name Gaillimh and gave its anglicised form ‘Galway’ to the Anglo-Norman settlement. 
+							It was only in the eighteenth century that the name River Corrib came into common use. According to legend it is said that Gailleamh or Galvia, the mythical daughter of Breasil, 
+							King of the Fir Bolg – associated with the fabled island of Hy Brazil – drowned in the river, thus bestowing her name on it. Another explanation, however, is that Gaillimh is 
+							derived from the Gaelic meaning 
+							<span style="font-style:italic">
+								‘stony river’
+							</span>.
+							Passing the rear of the hotel on our right hand side we see a waterway known as Middle River which flows under our feet as it empties back into the River Corrib. 
+							The modern apartment buildings here were once home to an industrial complex, which, along with Burke’s Distillery, also housed a flour and tuck mill.
+						</p>
+						<p>
+							As we make our way up towards O’Brien’s Bridge we can see on the far side of the river a tail race as well as a restored building known as the Bridge-Mills. 
+							<img class="full-image" src="img/bridgemills.jpg">
+							This location first saw milling as far back as 1558. In 1820 this was one of twenty-three mills which were turning out 12,000 tons of flour annually for
+							consumption both here in Galway and as far away as Dublin. At that time there were sixteen bakeries operating in Galway to supply bread to the city’s population. 
+							This burgeoning trade in flour and wheat also ensured a steady market for farmers from the surrounding countryside bringing their grain crop to town at this time. 
+							Today, a mill wheel can still be viewed in situ in this building. Some of the plants which grow on the limestone walls and bridges adjacent to the waterways can be
+							seen along this, and further stretches of the river. These include toadflax, a creeper with small violet and yellow flowers, and pellitory-of-the-wall, a creeper 
+							with a reddish stem and tiny flowers. Fontallis, a stringy looking moss, also clings to the stony bed of the river and on the sides of bridge piers. Mosses and
+							lichens also grow on waterside masonry. Opposite the Bridge-Mills, bur-reed, with its many spiky burs (seed heads) is one of the emergent plants which grows out 
+							of the river bed.
+						</p>
+						<img class="full-image" src="img/swan.jpg">
+
+						<p>
+							We now find ourselves at O’Brien’s Bridge, named after William O’Brien (1852–1928), the Irish patriot who founded the United Irish League and was 
+							imprisoned in the nearby Galway Gaol for his part in the Land Wars of the late nineteenth century.
+						</p>
+						<img class="full-image" src="img/obriens.jpg">
+						<p>
+							This bridge was formerly known as the Great Western Bridge and was the first bridge built to aid navigation across the Corrib in 1442. 
+							Its arches are home to Daubenton bats which along with the smaller pipistrelle bats can be seen feeding along the waterways at twilight. 
+							Indeed, the Daubenton bat – often referred to as ‘the water bat’ – hunts its prey by skimming hovercraft-like above the water in search of 
+							caddisflies, mayflies and midges, and may even scoop prey from the water surface using its large talons.
+						</p>
+						<p>
+							As we cross to the far side of the bridge we can see to our left an offshoot of the river rejoining its main flow via a small but elegant waterfall. 
+							Nearby is the sculpture of a heron, although it is certainly not unusual to witness the real thing in this area as it waits patiently to grab a passing meal 
+							from the water. Keeping the Corrib on our left and Middle River to our right, we now make our way along the continuation of the Bruach na Coiribe (Bank of the Corrib) walk.
+						</p>
+					</div>
+				</div>
+			  </ion-slide>
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 2 of 6</p>
+					</div>
+					<div class="item item-divider">
+						O'Brien's Bridge to Newtownsmith
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p2.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<img class="full-image" src="img/bruach.jpg">
+						<p>
+							The rich flora of the western or left-hand bank of the Corrib is the first thing to strike us on crossing the road. This growth provides cover to small rodents such 
+							as rats and mice, which, along with pygmy shrews, come out to forage under the cover of darkness. Foxes also scavenge at night, as is evident by their tell-tale 
+							footprints in the soft mud. Another waterside mammal is the otter, which feeds on crayfish and defines its riverside territory with its droppings. Beneath the bank-side 
+							vegetation is also home to aquatic snails, water fleas and water spiders. Closer to us, the eastern bank of Middle River is often awash with the colour of flowers in the 
+							spring and summer months.
+						</p>
+						<img class="full-image" src="img/flower.jpg">
+						<p>
+							As we continue up the river walk, we see a waterway emptying back into the Corrib. This is the end of the Gaol River, whose main body we will come upon a 
+							little further into our walk. Beside this outlet, a large and impressive if somewhat derelict structure catches our attention. This building is testament to a 
+							thriving distilling industry which Galway hosted in the nineteenth century. Owned by the Persse family, the distillery relocated from its original home close 
+							to the present university campus in the 1840s. The family also constructed a waterway from this location, which, as we can see, rejoins the Corrib just upstream 
+							from the distillery. Known as the Persse River, we shall again come across this waterway as our journey continues.
+						</p>
+						<img class="full-image" src="img/struct.jpg">
+						<p>
+							By the beginning of the twentieth century the Persse distillery was the town’s largest employer – providing work to an estimated one hundred people – 
+							and had an annual output of 400,000 gallons of whiskey – equal to that of the famous Bushmills distillery. Not only were the River Corrib and the 
+							Persse River construction utilised to turn the distillery’s mill, they were used to cool pipes containing the all-important whiskey vapour and also 
+							had numerous hoses connected to them in case of fire. The influx of Dublin whiskies due to improved road and rail transport coupled with the increased 
+							saturation of cheaper scotch whiskey into the international market meant that the Persse distillery was forced to close its doors in 1908 after nearly 
+							one hundred years of operation. A recently discovered bottle of its whiskey has however been valued at over €150,000!
+							<br><br>
+							On our right as we progress up a steep incline is a modern apartment block situated on Middle River. Founded by the Perry family, this block once housed 
+							the water-driven turbine of the Galway Electric Light Company, who supplied Galway’s electricity needs in the early part of the twentieth century. 
+							A trail-blazing daughter of the Perry family, Alice (1885–1969), qualified as the world’s first female engineer in 1906 and upon the death of her father, 
+							served in Galway as the country’s only female county surveyor. The turbine also charged batteries for the nearby McDonagh’s Flour Mill. In recent years it 
+							was deconstructed and presented to the engineering department of Galway’s University for teaching purposes. The hydro-electric station itself was acquired 
+							under a 1927 Act by the Electricity Supply Board, and served as the municipal depot for the rural electrification scheme in Galway.
+						</p>
+						<img class="full-image" src="img/house.jpg">
+						<p>
+							Just past this point we come to a gateway which leads to the Nora Barnacle Bridge. This bridge, named after the wife of Ireland’s greatest novelist, 
+							James Joyce (1882–1941), leads to Bowling Green Lane, the site of Nora’s former family home. Nora (1884–1951) grew up in Galway city and Joyce made 
+							visits to her home in 1909 and again in 1912. Indeed, Joyce’s first date with Nora on 16 June 1904 was immortalised as Bloomsday in his most famous novel, 
+							Ulysses. Nora’s love affair with a young Galway man Michael ‘Sonny’ Bodkin also inspired Joyce’s short story, The Dead. The Bodkins owned a sweetshop 
+							just off Eyre Square and today a plaque marks its location, while the Nora Barnacle House is now a small museum.
+						</p>
+						<img class="full-image" src="img/bowl.jpg">
+						<p>
+							As well as traversing Friar’s River, the Bridge also crossed another channel which was known locally as ‘Slaughterhouse River’. 
+							This river was named after the city’s first official slaughterhouse which was also located at Bowling Green in the latter half of the 
+							nineteenth century. This municipal facility was designed to regulate what had hitherto been the uncontrolled and at times often unhygienic 
+							slaughter practices of butchers throughout the city. The run-off of blood and offal into this waterway had the effect of greatly increasing 
+							the river’s brown eel population. The slaughterhouse also became a popular source of animal blood for locals in the production of black puddings. 
+							In the 1950s the slaughterhouse was eventually replaced by a city abattoir at Galway’s former Fairgreen, beside the railway station. Further up at 
+							Newtownsmith this channel also powered various flour and corn mills, a tannery, a malt house and the famous Galway Woollen Mill.
+						</p>
+						<img class="full-image" src="img/canal1.jpg">
+						<p>
+							Looking back towards the Corrib we can see a large steel and stone structure crossing the river. This was designed as a weir known as ‘the salmon traps’ 
+							or ‘cribs’ which were used to trap salmon for commercial sale up to 1998. In the middle of the structure is the ‘King’s Gap’, a six metre opening which 
+							allowed for the safe passage of a percentage of fish through the weir. Indeed, it is this section of the river which for many years was of prime economic
+							importance in the commercial fishing of salmon and trout. While it is thought that fishing took place here as far back as prehistoric times, ownership of 
+							this stretch of water took on great significance in the medieval period. In the thirteenth century King Henry III granted it to the Earl of Ulster.
+							<br><br>
+							Over the next number of centuries ownership of the fishery swung between the Crown and the founding family of Galway, the Anglo-Norman de Burgos, 
+							both of whom made substantial profits in granting licenses to the various merchant families of Galway for fishing along this stretch. The famous 1651 
+							map of Galway shows people netting and spearing fish here. Illegal fishing was a constant problem for the owners of the fishery and as early as 1389 a 
+							decree was issued forbidding the purchase of salmon which had been caught illegally by the Irish peasantry. The enduring value of the Corrib’s bounty to 
+							Galway is illustrated by the esteemed historian, James Hardiman, who in penning his comprehensive history of Galway in the early nineteenth century, wrote:
+							<p style="font-style:italic">
+								‘The salmon fishery is one of the most valuable in the kingdom, and from a very early period has been a source of emolument.’
+							</p>
+						</p>
+						<img class="full-image" src="img/salmon.jpg">
+						<p>
+							In 1852 the Ashworth brothers purchased the fishery for £5,000 and it was they who constructed the watch-tower that we previously encountered at Wolfe Tone Bridge. 
+							In later years the export of fish became a flourishing business and fish caught in the Corrib on a Monday could be found for sale the following day in London’s 
+							famous Billingsgate fish market. Into the latter half of the twentieth century and with the fisheries falling under state control, the picturesque Fishery 
+							House Cottage we can see on the far bank was home to the manager of Corrib fishery. Today it houses an office of the Western Fishery Board which, although engaging 
+							in a limited amount of commercial fishing, is primarily concerned with salmon stock control. Licenses to fish the river can also be had through the Fishery Board 
+							and favourable prices are given to locals to fish from the location we stand on, which is known as Fisherman’s Wharf.
+							<br><br>
+							It is also worth noting here that the rock from which the fabled Galvia (who is believed to have given her name to Galway) threw herself into the river, was located between 
+							what is today the King’s Gap and the Salmon Weir Bridge. Also on the far bank, we note a prominent two-storey house which in the nineteenth century was the residence of the 
+							Fisheries owner, Colonel Cross, but has long housed a gentleman’s club. Known as The County Club, this meeting place for Galway landlords and captains of industry was originally 
+							located in Eyre Square’s Hibernian House before moving to its present riverside home in the 1800s.
+						</p>
+						<img class="full-image" src="img/club.jpg">
+					</div>
+				</div>
+			  </ion-slide>
+			  
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 3 of 6</p>
+					</div>
+					<div class="item item-divider">
+						Newtownsmith to Steamer's Quay
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p3.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<p>
+							Moving on up along the riverside we leave the Bruach na Coiribe walk by crossing the footbridge over the Friar’s River. This river was associated with the 
+							Franciscan Abbey which was founded on the site of the nearby courthouse by the de Burgo family in 1296. The Abbey suffered under the reformation of Henry VIII, 
+							but by 1571 it was operating under license from Queen Elizabeth I. At that time the abbey was leased to Galway Corporation and the friars were given a weekly 
+							allowance of five salmon and as many eels as they could fish in one day from the Corrib. The Franciscans transferred to their present home on what is now St 
+							Francis Street in 1660, though their former home was still referred to locally as ‘the abbey’ even after the construction of the courthouse on its site in 1815.
+						</p>
+						<img class="full-image" src="img/newchurch.jpg">
+						<p>
+							We now exit the walkway onto Newtownsmith via a stone-cut arch which is dedicated to the many Irish people who gave their lives in search of 
+							peace and democracy both here in Ireland and overseas. 
+						</p>
+						<img class="full-image" src="img/archway.jpg">
+						<p>
+							Across the road is the site of another memorial plaque. This one is located at the rear 
+							entrance to the Franciscan church and is dedicated to the previously mentioned James Hardiman (1782–1855), who is buried in its graveyard. 
+							Hardiman’s History of the Town and County of the Town of Galway, published in 1820, remains an important document on the history of the town 
+							from its foundation up to the early part of the nineteenth century. The university’s library, in which Hardiman worked, is also named in his honour.
+						</p>
+						<img class="full-image" src="img/weir.jpg">
+						<p>
+							We now make our way past the gothic-styled Convent of Mercy Church on our right hand side. Here is a good vantage point to view the seven 
+							arched Salmon Weir Bridge. Originally called Gaol Bridge, it was built in 1820 with the aim of hastening convicted criminals from the courthouse 
+							on the north side of the river, to the county and town gaols (now the site of the cathedral) on the western side. On this side of the bridge is an eel 
+							weir operated by the Western Fisheries Board during the autumn and winter months. Here, large nets are used to catch silver eels migrating during 
+							particular phases of the moon from Lough Corrib back to their spawning grounds in the Sargasso Sea some 8,000 kilometres away. As eel consumption 
+							is relatively low in Ireland most of the catch is exported to Holland and Germany where they are a highly prized food item.
+							<br><br>
+							Carefully crossing the road we remain on the eastern bank of the river as we follow its flow upstream. Keep an eye out along here 
+							for some interesting wooden sculptures.
+						</p>
+						<img class="full-image" src="img/woodensalmon.jpg">
+						<p>
+							We are now brought into the quiet residential Waterside area where we notice a number of boat and rowing clubs, including the 
+							Corrib Rowing and Yachting Club on the far side of the river which dates back to 1864. The many clubs in this area of the city 
+							are indeed testament to the wonderful recreational and sporting amenity afforded by the river to the people of Galway. As we 
+							face towards the river we see the massive regulating weir which divides the river into three parts, with the main torrent 
+							rushing over the weir at a maximum rate of some 10,000 cubic feet of water per second when the river is in full flow. 
+							The weir was originally constructed in 1852 but was reconstructed in the 1960s as modern engineering techniques allowed 
+							for greater control over the river flow. On the west bank we also see the delightfully located Weir House which once 
+							catered for visiting anglers and today houses the offices of the Western Fisheries Board.
+							<br><br>
+							Further upstream we see three large stone columns rising from the river. These sentinels stand as testament to an era when 
+							tourists of the ascendancy classes travelled en masse by train between Galway and Clifden in Connemara. At the end of the 
+							nineteenth century these cut-stone pillars were constructed to support the Galway to Clifden Railway Viaduct. Unfortunately, 
+							this impressive feat of engineering had a relatively short existence, and with the dissipation of the landed gentry when Ireland 
+							gained independence in the early twentieth century, the railway line ceased to operate in 1935.
+						</p>
+						<img class="full-image" src="img/pillars.jpg">
+						<p>
+							Following the river as far as we can we now find ourselves at the furthest upriver point on our walk: the cut-limestone Steamer’s Quay. 
+							Built in 1895 to complement the railway, it replaced the former wooden structure and was an important docking point for steam-boats and 
+							other vessels bringing people and supplies to and from the many towns and villages dotted around the shores of Lough Corrib. Pleasure 
+							cruises – which continue today from the quay – were a popular tourist attraction and an ideal way of taking a leisurely jaunt upriver to 
+							where the river meets the lake. From our vantage point here, we can also see upriver to the crumbling Terryland Castle. This fortified 
+							house, built around 1600, was home to the Clanricardes, descendants of the Anglo-Norman de Burgo family who founded the modern town of Galway.
+						</p>
+						<img class="full-image" src="img/castle.jpg">
+						<p>
+							Its lifespan was rather short however, as in 1691 it was burnt down by retreating defenders during the Williamite siege of the city. 
+							The reed-beds at our present location provide shelter to mallards, moorhens and mute swans, while overhead, cormorants can often be seen 
+							making their way between the sea and Lough Corrib.
+						</p>
+					</div>
+				</div>
+			  </ion-slide>
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 4 of 6</p>
+					</div>
+					<div class="item item-divider">
+						Steamer's Quay to Beggar’s Bridge
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p4.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<p>
+							Retracing our steps from Steamer’s Quay we now make our way back the Salmon Weir Bridge and cross over the river 
+							from its east to west side. Stopping on the narrow bridge footpath we can look directly down into the waters of the 
+							Corrib. It is this area of water which is most popular with anglers, who can often be seen during the summer months 
+							standing in the middle of the river as they seek to hook passing salmon and trout.
+							<br><br>
+							Having crossed the Salmon Weir Bridge we are now on the western side of the Corrib. Continuing on the footpath we encounter 
+							the ‘Equality Emerging’ sculpture by one of Ireland’s most famous sculptors, John Behan, who is largely based in Galway. 
+							Unveiled in 2001, the piece celebrates what has been achieved to date in the struggle for equality. Arguably, Behan’s most 
+							famous work is the haunting ‘Famine Ship’, located at the foot of Croagh Patrick in County Mayo, commemorating the Great 
+							Famine of the mid-nineteenth century. Replicas of the ship can be found in Galway’s Town Hall Theatre at Courthouse Square 
+							and at the County Council Offices on Prospect Hill.
+						</p>
+						<img class="full-image" src="img/equality.jpg">
+						<p>
+							Should it be open, this is a good opportunity to visit Galway Cathedral, or to give it its full title, the Cathedral of 
+							Our Lady Assumed into Heaven and St Nicholas. The Cathedral was completed on the former site of the City and County Gaol 
+							in 1965, and as such, is one of the last great cathedrals to be built in Europe. Constructed of Galway limestone, 
+							the Cathedral was built to the traditional cruciform plan. Featuring both the local and exotic in its interior features, 
+							its floors are of beautiful Connemara marble while its seats are African mahogany. Above the north entrance is a bronze 
+							statue of Our Lady and Child as well as carvings of three sacraments: baptism, matrimony and ordination. Inside the 
+							93-metre-long cathedral we find four chapels and striking stained glass windows. The mosaic of the Crucifixion in the 
+							retrochoir is unquestionably the most prominent symbol of all. An audiovisual presentation on its history, construction 
+							and features is shown in one of the Cathedrals wings and is well worth a viewing. 
+						</p>
+						<img class="full-image" src="img/cath.jpg">
+						<p>
+							From the Cathedral and continuing on a short distance, we now have the option of a quick detour off the beaten track by 
+							carefully crossing back over to the ‘Equality Emerging’ sculpture and then taking the next laneway to our right.
+							<br><br>
+							If however, we choose to stick to our main walk for now, we remain on the same side as the Cathedral and follow 
+							the main road round until we are standing on Beggar’s Bridge which crosses Gaol River. (Skip forward to Beggar’s 
+							Bridge to Wolfe Tone Bridge section.)
+						</p>
+					</div>
+				</div>
+			  </ion-slide>
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 5 of 6</p>
+					</div>
+					<div class="item item-divider">
+						Detour: Persse River and Fisheries Field
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p5.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<p>
+							Choosing to take the laneway on our right-hand side we are now on a walkway up to 
+							what is the Fisheries Field. A little up the laneway, our ear is alerted by the 
+							sound of rushing water. Peering over the small bridge we see a channel of water 
+							which is the Persse River. This channel, as already mentioned, was constructed 
+							between the site of the Persse family’s original distillery (established in the 
+							present grounds of the National University of Ireland, Galway, in 1815) and its 
+							new distillery building which we previously passed on the banks of the Corrib.
+						</p>
+						<img class="full-image" src="img/waterfall.jpg">
+						<img class="full-image" src="img/stone.jpg">
+						<p>
+						    Continuing up the laneway we arrive at an imposing stone structure. This nineteenth 
+							century lime-kiln was restored by the Galway Civic Trust in 2006. Such constructions 
+							were important in the production of lime since medieval times. Broken limestone was 
+							transported to the brick-lined kiln where it was then mixed with fuel and burnt down 
+							to a powdery substance for use as whitewash, mortar and fertiliser. Lime was also used 
+							to sanitise buildings and it is thought that this kiln was constructed in response to a 
+							devastating outbreak of cholera in Galway in the 1820s. Interestingly, when the kiln was 
+							no longer used, a house was built on top of it which was inhabited until its demolition 
+							in the 1970s. This building, along with the Fisheries Tower and Weir House, was once 
+							owned by Colonel Cross, who, as previously noted, held the fishing rights on the River 
+							Corrib in the nineteenth century.
+							<br><br>
+							The steps in front of the kiln lead down to a quiet stretch of water (an offshoot of the 
+							Eglinton Canal which we shall return to on resumption of our main walk) which is a common 
+							launching place for the kayak and canoe clubs operating out of the Fisheries Field. 
+							The vicinity also houses the workshops of the renowned Galway-based Macnas Theatre Group 
+							who have performed their dazzling street parades and lavish theatre productions all 
+							around the world. The group is often welcomed home to perform on the streets of their 
+							hometown on St Patrick’s Day, or during the famous Galway Arts Festival held each July. 
+							The Fisheries Field is frequently a hive of activity during this festival as Macnas 
+							prepare for its colourful street parade, while a big top erected in the field plays 
+							host to international rock and pop performances.
+						</p>
+						<img class="full-image" src="img/boats.jpg">
+						<p>
+						    Returning to the main road we follow the curve of the footpath round and once again 
+							carefully cross the road so that we are now standing on what is Beggar’s Bridge which 
+							crosses over Gaol River.
+						</p>
+					</div>
+				</div>
+			  </ion-slide>
+			  <ion-slide>
+				<div class="list card">
+					<div class="item item-avatar">
+						<img src="img/walkgreen.png">
+						<h2>Walk 1</h2>
+						<p>Page 6 of 6</p>
+					</div>
+					<div class="item item-divider">
+						Beggar’s Bridge to Wolfe Tone Bridge
+						<div style="height:8px;"></div>
+						<audio controls style="width:100%;">
+							<source src="../audio/walk1p6.mp3"/>
+						</audio>
+					</div>
+					<div class="item item-body">
+						<p>
+							Gaol River is associated with the Galway Gaol, which, as mentioned, operated on the 
+							present site of the Cathedral between 1810 and 1935. The complex, which housed 
+							separate male and female confinements, was surrounded by a seven metre high wall. 
+							Throughout the nineteenth century life in the gaol was particularly tough, with 
+							prisoners forced to work a treadmill or toil in the gaol’s bone-breaking yard. 
+							Despite its severity, it was reported during the harsh Famine years of the mid 
+							1800s that the poor of Galway were committing minor crimes in the hope of securing 
+							basic food and shelter through imprisonment in the gaol. Nineteenth century hardship 
+							is also associated with Beggar’s Bridge, thus called as the inmates of the nearby 
+							workhouse used to beg for alms at this location. The site of the workhouse is now 
+							occupied by University College Hospital, located at the end of University Road on 
+							which we now stand.
+						</p>
+						<img class="full-image" src="img/can.jpg">
+						<p>  
+							We now pass the Millennium Children’s Park on our left and with the entrance to the 
+							university on our right we arrive at the canal. Just before the canal however is a 
+							seated garden landscaped by the Galway Civic Trust, which, when the park is open, 
+							makes the ideal stopping place for some rest and contemplation before we resume our 
+							journey. This canal garden was dedicated to the memory of local woman, Mrs Nellie 
+							McHugh, who was active in planting shrubs and trees along the canal, and in encouraging 
+							young people of the area to take pride in their environment. Opposite this garden is 
+							one of a number of entrances to the National University of Ireland, Galway campus. 
+							Founded as Queen’s College in 1845, the original quadrangle building, which was based 
+							on that of Christchurch College, Oxford, is still the University’s most appealing feature. 
+							Today, some 15,000 students study at the University.
+						</p>
+						<img class="full-image" src="img/nuig.jpg">
+						<p>  
+							Following the flow of the canal we turn left into what is Canal Road Upper. The canal 
+							we are now walking alongside is the Eglington Canal. The 1,200 metre canal was designed 
+							to facilitate the movement of goods by connecting Lough Corrib to the sea. Although this 
+							large scale engineering project was never the financial success that it was intended to be, 
+							the canal undoubtedly provided life-saving labour to many of those involved in its 
+							construction during and after the harsh Famine years of the mid-nineteenth century. 
+							Opened in 1852 by the Lord Lieutenant of Ireland, Lord Eglington, the canal project 
+							incorporated lock gates, swivel bridges and the large mooring area known as the Claddagh 
+							basin into its design. Improvement to road and rail travel led to the canal’s demise and 
+						    it was eventually closed to navigation in the 1950s when its swivel bridges were replaced 
+							with concrete structures.
+						</p>
+						<img class="full-image" src="img/river1.jpg">
+						<p>
+							Continuing down Canal Road, we notice that the canal departs into another waterway. 
+							The river which branches away from the canal at this point is St Clare’s River as it 
+							is associated with the reclusive order of Poor Clare Nuns whose convent is situated 
+							over the walls on the left bank. This order lives an austere life of prayer and devotion 
+							with minimal contact with the outside world. The Poor Clares were originally established 
+							in the medieval heart of Galway, and gave their name to one of the town’s fourteen laneways. 
+							In 1649, however, they were granted a home on their present site by the city corporation. 
+							Over the next number of years the Order’s nuns were forced into hiding, and to disperse, 
+							first by the Cromwellian invasion and then by the rigours of the penal laws.
+							<br><br>
+							This point in the river is also a popular fishing spot for young people of the area, 
+							attracting as it does minnow, bream and trout. Indeed, this area is a wonderfully rich 
+							ecosystem and best enjoyed at a slow leisurely pace. It is abundant in aquatic flowers 
+							such as willowherb, purple loosestrife and meadowsweet, all of which are at their most 
+							colourful in the summertime. Also adorning the canal banks are shrubs such as fuchsia 
+							and the fragrant lilac buddleia, which attracts hoverflies and dragonflies as well as 
+							the butterfly species of orangetip, small tortoiseshell and peacock. Bogbean, with its 
+							trio of cabbage-like leaves, grows here too. Sycamore, alder and willow trees, which 
+							can all tolerate flooding, are in evidence along this stretch of the canal. Birdlife 
+							such as warblers and swallows are also commonly visible here during warmer months and 
+							feed on insects such as the water-boatman, pond-skater and whirligig. St Clare’s River 
+							reappears in the Mill Street area, where part of it diverges to form other waterways, 
+							while its main flow carries back into the Corrib at O’Brien’s Bridge.
+						</p>
+						<img class="full-image" src="img/butterfly.jpg">
+						<p>
+							Further up we cross over two bridges and find ourselves again on a canal-side path. 
+							Here we see what remains of one of the canal’s lock-gates. Looking across we can see 
+							the remains of an old stone building which once was the Cloherty and Semple Saw Mill, 
+							another of the city’s well-known water-powered industries. The area on the far bank is
+							known as Parkavera or Pairc an Mhaoire (the Mayor’s field). Continuing on, we emerge 
+							at an attractive building of punched limestone known as the Eglington Canal House. 
+							We are now on Ballsbridge in Dominic Street. The bridge name is actually a corruption 
+							of the ‘Bald Bridge’ or in Irish, An Droichead Maoil, meaning the bridge without parapets. 
+							From here, we follow the canal along the street called Raven’s Terrace and at the main 
+							road we are close to the point where we commenced our journey. Before we come full 
+							circle, however, the last leg of our journey will bring us into the famous Claddagh 
+							area of the city.
+						</p>
+						<img class="full-image" src="img/river2.jpg">
+						<p>
+							Crossing the road we pass a statue of the celebrated Galway preacher, Fr Tom Burke (1830–1883). 
+							Famous for his fund-raising endeavours for his Dominican Order, Burke was a strong nationalist 
+							and an outspoken critic of English occupation in Ireland. On our left we have the Claddagh Basin 
+							was the terminus for many boats travelling down the Eglington Canal. Passing the Dominican 
+							church on our right is the Claddagh, the ancient fishing village, which up until the 1930s 
+							comprised a network of cobbled lanes and white-washed thatched cottages. This tight-knit 
+							community is famous for its association with the world-famous Claddagh ring which was the 
+							traditional wedding ring of the village. Indeed, the Claddagh was famous for having its own 
+							laws and customs and still today elects its own ‘king'. The Dominican association with this 
+							part of Galway is a long-standing one, with a friary having been established here as far back 
+							as 1488. Enshrined in the modern church is the seventeenth century Our Lady of Galway statue 
+							which was donated to the Dominicans by the Claddagh community. Today, the Dominican friars 
+							continue the ancient rite of ‘Blessing the Bay’ for the fishing families of the Claddagh.
+						</p>
+						<img class="full-image" src="img/clad.jpg">
+						<p>
+							Just beyond the basin is an ideal to place to relax for a while on a waterside bench and take the 
+							opportunity to view and feed the many swans and ducks which gather in the shallow waters here. 
+							In the distance, jutting out into the sea we can view Nimmo’s Pier. Built in 1822, this pier was 
+							named after its designer, the famous Scottish engineer, Alexander Nimmo (1783–1832) who was 
+							employed by the government in the 1820s to improve the infrastructure of the western seaboard through
+							a number of civil engineering projects. Across the river we see the colourfully picturesque 
+							houses of ‘The Long Walk’ which regularly feature in postcards of the city, and have also been 
+							immortalised in the lyrics of the popular song The Galway Girl.
+						</p>
+						<img class="full-image" src="img/long.jpg">
+						<p>
+							Turning back on ourselves, we now swing a right in through a gateway. Here we see a monument 
+							to the Claddagh fishermen who tragically lost their lives in the waters of Galway Bay in 1902. 
+							The Claddagh was to suffer further tragedy a few years later when many of its fishermen who 
+							joined the British Navy during World War I were killed in action. The great fishing tradition 
+							of the area continued, however, and commonly dry-docked in this area are a few remaining Galway 
+							hookers – the traditional sailing craft of the Claddagh fishermen – whose sails are represented 
+							in the Quincentennial Fountain in the city’s Eyre Square. Crossing over the footbridge beside 
+							the gate-lock we proceed along the other side of the Claddagh Basin and emerge at Wolfe Tone Bridge, 
+							almost where our tour originally started from. We have now completed a journey which has given us an 
+							insight into the social, cultural, environmental and economic history of the River Corrib and 
+							its many associated waterways from prehistoric times, through the medieval era, the ‘industrial 
+							revolution’ of the nineteenth century and up to present times. Having covered such time and space, 
+							we can now perhaps mull over our waterside journey while having a well earned rest and a cup of 
+							coffee (or maybe something stronger) while we watch the world go by in the one of the many bars 
+							and restaurants of the city’s famous Quay Street area.
+						</p>
+					</div>
+				</div>
+			  </ion-slide>
+		</ion-slide-box>
+		<div class="button-container">
+			<a class="button  button-calm button-calm1 button-green2" ng-click="backToMap();">
+				Back To Map
+			</a>
+		</div>
+	</div>
+	<!--END OF WALK 1-->
+	
+	
+	<!--WALK 2-->
+	<div  class="map-popup" ng-class="popUpWalk2">
+		<div class="list card">
+			<div class="item item-avatar">
+				<img src="img/walkred.png">
+				<h2>Walk 2</h2>
+				<p>Page 1 of 1</p>
+			</div>
+			<div class="item item-divider">
+				Start and end on O'Brien's Bridge
+				<div style="height:8px;"></div>
+				<audio controls style="width:100%;">
+					<source src="../audio/walk2.mp3"/>
+				</audio>
+			</div>
+			<div class="item item-body">
+				<img class="full-image" src="img/long.jpg">
+				<p>
+					We commence this walk on O’Brien’s Bridge which crosses the River Corrib 
+					in the heart of the city. Originally known as the Great Western Bridge, 
+					this structure was the first bridge built to aid navigation across the 
+					river and was constructed as far back as 1442. Later it was renamed as 
+					O’Brien’s Bridge in honour of the patriot William O’Brien (1852-1928). 
+					A nationalist and journalist, O’Brien represented various County Cork 
+					seats in the British Parliament in the late nineteenth and early twentieth 
+					century. Most famously however, he founded the United Irish League which 
+					sought the redistribution of land to small farmers in the West of Ireland. 
+					O’Brien was imprisoned in the nearby Galway Gaol for his part in the Land 
+					Wars of the late nineteenth century in which he encouraged demonstrations 
+					and rent strikes.
+					<br><br>
+					Heading west, we traverse the bridge and find ourselves outside the stone 
+					built Bridge Mills. This impressively restored building which now houses an 
+					eclectic range of shops and studios was home to a flour mill dating back to 
+					1558. In the early part of the nineteenth century it was still operating as 
+					one of over twenty mills in Galway supplying flour to the city’s bakeries 
+					and further afield.
+				</p>
+				<img class="full-image" src="img/bridgemills1.jpg">
+				<p>
+					From here we turn left into Dominick Street. We now swing right at the next corner 
+					and find ourselves in Dominick Street Lower. This street was part of a city 
+					expansion in the nineteenth century which also owes its existence to the waterways. 
+					The area became fashionable at this time among mill and distillery owners and 
+					managers and the large town houses built for them are still evident in the 
+					street’s architectural style.
+					<br><br>
+					A fine example of this is the house at 47 Dominick Street, which was built in the 
+					1840s as a residence for the Persse family, the Galway whiskey makers, whose 
+					distillery remains are still visible on the banks of the Corrib (see Walk 1). 
+					The most famous family member was Lady Augusta Gregory (1852-1932) of Coole Park, 
+					playwright and patroness of the Irish literary revival and one of the founders of 
+					The National Theatre of Ireland – The Abbey. On her many visits to Galway Lady 
+					Gregory resided at 47 Dominick Street with her sister, Arabella Persse. The house 
+					is now home to one of the hubs of the city’s cultural life, The Galway Arts Centre, 
+					which frequently hosts a diverse range of exhibitions, workshops and performances.
+					<br><br>
+					Another of the street’s most famous residents was a policeman, who went on to become 
+					something of a seminal figure in Australian history. Born in 1821, Robert Burke-O’Hara 
+					led a colourful life before emigrating to Australia, where, in 1860, he led an expedition 
+					from the south to the north of the country, through previously uncharted territory. 
+					While the expedition party managed to traverse the continent, the tortuous efforts 
+					of the journey coupled with intense heat, starvation and health problems, meant that 
+					many of the group, Burke-O’Hara included, lost their lives on the return leg. His 
+					place in exploration history was however, written, and numerous monuments to his 
+					memory abound in Australia. A simple plaque over a bookmaker’s premises marks the 
+					place where he lived in Dominick Street.
+					<br><br>
+					Also commemorated on Dominick Street is the celebrated Galway preacher, Fr Tom Burke 
+					(1830-1883). Noted for his humour as well as his political conviction, Burke famously 
+					orated at the re-interment of the remains of the Irish ‘Liberator’, Daniel O’Connell in 
+					1869. An outspoken critic of English occupation in Ireland, the Dominican preacher was 
+					an ardent fund-raiser for the church. As well as a plaque to his memory on the bridge 
+					over the canal, Fr Tom is also commemorated with a statue erected outside the nearby 
+					fire-station.
+				</p>
+				<img class="full-image" src="img/tom.jpg">
+				<p>
+					It is on this bridge, known as Ballsbridge, that we depart Dominick Street by turning right and 
+					following the canal upstream for a short while. The bridge’s name is in fact a corruption of 
+					Bald Bridge which in turn was taken from the Gaelic name, An Droichead Maoil, referring to the 
+					fact that the bridge did not have parapets. Turning off the bridge, we notice a smart little 
+					building of punched Galway limestone which now houses offices but is still known as Eglington 
+					Canal House. The stretch of water we are now alongside is the Eglington Canal and was designed 
+					in the mid nineteenth century to aid the navigation of goods between Lough Corrib and the sea. 
+					At 1,200 metres it departs from the River Corrib in the vicinity of the university and was 
+					named after the Lord Lieutenant of Ireland, Lord Eglington, who opened the project in 1852. 
+					Passing the canal lock-gate we now turn right over a footbridge crossing the canal.
+				</p>
+				<img class="full-image" src="img/backcanal.jpg">
+				<p>
+					Looking up, we notice an old stone building with some carved lettering still visible in its façade. 
+					This was once the Cloherty and Semple Saw Mill and stands testament to another of the city’s 
+					water-powered industrial areas. This area is known as Parkavera or Pairc an Mhaoira (The Mayor’s Field). 
+					Leaving the canal behind we continue to walk slightly back upstream before turning in to Parkavera. 
+					Here, opposite a row of houses we can peer over the wall to see the small Parkavera River. 
+					Continuing out onto the main road, we are now on Mill Street where, beside the impressive 
+					three-story Millers House we can see the river elegantly tumbling over rocks and stones as 
+					it splits in two. We now divert back across the road and into the car-park of the Garda Station. 
+					Seeing a large wooden mill wheel on our right hand side we are now at the Madeira River. The small 
+					island which this river helps to form was once home to a brewery, a paper mill, a distillery and a 
+					woolen mill while the present Garda Station was once the site of the Galway Foundry which was 
+					serviced by another artificial channel of water – still visible in the car-park.
+				</p>
+				<img class="full-image" src="img/mill.jpg">
+				<p>
+					Returning to the main road we can again cross the road to peer at some aquatic plants which appear 
+					in this shallow slow-moving stretch of water. These include stonewort, a lime-loving plant which 
+					grows in clumps, Canadian pondweed which grows in dense mats on the muddy river bed, and water 
+					crowfoot, the white flowered relative of the buttercup whose long stems sway in the current while 
+					remaining firmly rooted to the bottom. Strolling onward we are now back at our starting point, 
+					O’Briens Bridge, where a number of river systems converge at what is fondly known locally as 
+					‘the meeting of the waters’.
+				</p>
+				<img class="full-image" src="img/reed.jpg">
+				
+			</div>
+		</div>
+		<div class="button-container">
+			<a class="button  button-calm button-calm1 button-red2" ng-click="backToMap();">
+				Back To Map
+			</a>
+		</div>
+	</div>
+	
+	
+	<!--WALK 3-->
+	<div  class="map-popup" ng-class="popUpWalk3">
+		<div class="list card">
+			<div class="item item-avatar">
+				<img src="img/walkblue.png">
+				<h2>Walk 3</h2>
+				<p>Page 1 of 1</p>
+			</div>
+			<div class="item item-divider">
+				Start and end at Salmon Weir Bridge
+				<div style="height:8px;"></div>
+				<audio controls style="width:100%;">
+					<source src="../audio/walk3.mp3"/>
+				</audio>
+			</div>
+			<div class="item item-body">
+				<img class="full-image" src="img/cath1.jpg">
+				<p>
+					We commence our walk on Salmon Weir Bridge, which was originally built in 1820 to 
+					transport convicted criminals from the Courthouse on one side of the Corrib to the 
+					County and City Gaol (now the site of Galway Cathedral) on the other. From our vantage 
+					point on the bridge we can look upstream to the regulating weir as well as downriver 
+					to the eel traps and the remains of salmon cribs and beyond. Engrossed crowds often 
+					gather on the bridge here during summer months to watch anglers catching salmon or 
+					trout in the shallow waters along this stretch of the river.
+					<br><br>
+					With the Cathedral to our left we advance until we meet another bridge and body of water. 
+					This is Beggar’s Bridge and the river which flows beneath it is Gaol River. The Bridge is 
+					so called, as the destitute inmates of the Galway Workhouse used to beg at this location. 
+					Peering into the distance, up University Road, we can see the site of that workhouse – 
+					now home to Galway’s main hospital. Instead of crossing this bridge, however, we turn 
+					left and stroll along the bank Gaol River. Keeping the Cathedral on our left and this 
+					calm flowing stretch of water on our right, we are now on Gaol Road. Here, we leave 
+					behind the busy road as we enter onto a peaceful riverside walk.
+				</p>
+				<img class="full-image" src="img/riverbed.jpg">
+				<p>
+					Gaol River was associated with the County and City Gaol which was established in 1810 on 
+					the very site now occupied by the Cathedral. The building was constructed of stone and 
+					steel and was surrounded by a seven metre high wall. Although the County and City Gaol 
+					buildings were at first separate buildings within these confines, they were merged around 
+					1870, with the city gaol becoming a women’s gaol. Despite harsh conditions in the gaol, 
+					which included prisoners being forced to work a treadwheel or to labour in the gaol’s 
+					bone-breaking yard, it was reported in the Famine year of 1849 that ‘the superiority of 
+					the gaol dietary over that used in the workhouse’ was encouraging the poor of Galway to 
+					commit crimes in the hope of incarceration in the gaol. Today, in the centre of the car 
+					park is a memorial to the inmates who died or were executed during the prison’s existence.
+					<br><br>
+					Along this stretch of the Gaol River we see reeds, sedges and rushes emerging from the water. 
+					Smaller plants such as horsetails, watermint, watercress and bittercress often grow in the 
+					shelter of these higher emergents. This natural environment is home to insects such as the 
+					dragonfly, mayfly and waterbugs. Waterbirds which can be seen in this area include coots and 
+					moorhens while trout and eel occasionally make their way into the river.
+				</p>
+				<img class="full-image" src="img/bird.jpg">
+				<p>
+					Over the wall, on the far bank, we can see the convent and grounds of the Poor Clare Nuns. 
+					This order lives an austere life of prayer and devotion with minimal contact with the outside 
+					world. The fact that the convent is surrounded on all sides by water gives rise to this area 
+					of Galway being known as Nuns’ Island. The original convent of the Poor Clares was located in 
+					the medieval heart of Galway and the order gave their name to one of the town’s fourteen laneways. 
+					In 1649 the city Corporation granted the Poor Clares a new home on their present site. Over the 
+					next number of years, however, the nuns faced turbulent times as they were temporarily forced 
+					into hiding and to disperse, first by the Cromwellian invasion and then by the rigour of the 
+					Penal Laws.
+					<br><br>
+					Following the river downstream we pass an impressive building of cut limestone known as Island House 
+					which is home to the County Library Service and holds many important documents relating to Galway’s 
+					history. Beyond the library, the river runs underground at another striking building of Galway stone. 
+					This location was once the flour mills of McDonaghs and Palmers, but was later purchased by the 
+					National University of Ireland, Galway to house its engineering department and power a turbine 
+					connected to the national electricity grid. Gaol River empties back in to the River Corrib south 
+					of the Salmon Weir Bridge.
+				</p>
+				<img class="full-image" src="img/house1.jpg">
+				<p>
+					Leaving sight of the river, we now continue our journey, following the loop of the footpath around and 
+					keeping the car park to our left hand side. Hidden away in the undergrowth here to our right is a 
+					narrow stream of water called the Persse River which runs parallel to the Corrib at this point. 
+					This man-made channel was constructed to act as a mill race for the nearby Persse Whiskey Distillery 
+					which operated throughout the nineteenth century. The river flows from the plant’s original home in 
+					the grounds of the university, under the Salmon Weir Bridge, and on to where it can be seen returning 
+					back into the Corrib close to the remains of the distillery. Along this stretch of our walk we also 
+					view a number of old fishery related buildings which front onto the River Corrib. These include the 
+					former manager’s cottage and ice house, while the prominent three-storey house was once home to the 
+					fisheries owner. Later this building became the ‘County Club’ – a social retreat and meeting place 
+					for wealthy businessmen of Galway.
+				</p>
+				<img class="full-image" src="img/heron3.jpg">
+				<p>
+					Should it be open, this is perhaps an ideal opportunity to cross the road visit the Galway Cathedral or 
+					to give it its full title, the Cathedral of Our Lady Assumed into Heaven and St. Nicholas. Following the 
+					closure of the gaol in 1935, the Galway County Council transferred ownership of the site to the Bishop of 
+					Galway. Work stated on the building in 1958 and was completed in 1965 with much of the funds required 
+					coming from Irish emigrants in the United States. The Cathedral was built in local limestone to a 
+					traditional cruciform plan and although its style may be described as Renaissance it also incorporates a 
+					number of other stylistic approaches.
+					<br><br>
+					Some of the noteworthy features of the Cathedral include its three rose widows, the bronze statue of Our 
+					Lady and Child and the carvings of three sacraments – Baptism, Matrimony and Ordination – over the north 
+					entrance. Inside the 92 metre long cathedral we find four chapels, beautiful Connemara marble floors and 
+					seats of West African mahogany. Other stained windows of interest include The Multiplication of the Loaves 
+					and Adoration of the Magi while the mosaic of the Crucifixion in the retrochoir is unquestionably the most 
+					prominent symbol of all. An interesting audio-visual presentation on the history of the cathedral can be 
+					viewed inside the building.
+				</p>
+				<img class="full-image" src="img/bank.jpg">
+				<p>
+					On exiting the Cathedral we now complete our circuit by returning to Salmon Weir Bridge.
+				</p>
+			</div>
+		</div>
+		<div class="button-container">
+			<a class="button  button-calm button-calm1 button-blue2" ng-click="backToMap();">
+				Back To Map
+			</a>
+		</div>
+	</div>
+   </ion-view>
+  </body>
+</html>

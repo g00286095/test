@@ -1,0 +1,144 @@
+<ion-view class="home" left-buttons="leftButtons" right-buttons="rightButtons">
+        <ion-slide-box class="has-footer" on-slide-changed="slideChanged(index)">
+          <ion-slide class="intro-slide">
+            <div id="logo">
+              <img src="img/logo1.png">
+            </div>
+			<div class="intro-content">
+			   <!-- Display current location's weather data-->
+				<p class="today"><b>Today's weather in Galway:</b></p>			
+				<span class="large">{{temp}}&degc </span>
+				<h4 class="weather"><weather-icon icon="current.icon" id="current-icon"></weather-icon> {{current.currently.summary}}</h4>
+			</div>
+			<div>
+				<a class="button button-intro2" href="#/tab/maps">
+					WALKS
+				</a>
+			</div>
+          </ion-slide>
+		  <ion-slide class="has-header">
+          <div class="list card" style="max-height:calc(100vh - 110px);">
+			  <div style="text-align:center;" class="item">
+				<h2>Welcome to</h2>
+				<h2>Galway City Waterway Walks</h2>
+			  </div>
+			  <div class="item item-body" style="max-height:calc(100vh - 200px);">
+				<img class="full-image" src="img/river.jpg">
+				<p>
+					As Chair of Dúchas na Gaillimhe – Galway Civic Trust, it is my great pleasure 
+					to present Galway City Waterways Walks to the people of Galway and visitors to 
+					our city. The walks along the River Corrib and associated watercourses have been 
+					described both as a ‘Hidden Treasure in the Heart of Galway’ and as the ‘Venice of the North’, 
+					both descriptions are indeed appropriate.
+					<br><br>
+					It is our hope that people will use this booklet to take time out to enjoy a leisurely city 
+					centre stroll, revisiting the locations of an area which was the industrial heart of the city 
+					in times past and see other more recent features along the way while also enjoying the wide 
+					variety of birds and plants.
+					<br><br>
+					In addition to the extensive conservation and restoration projects undertaken by Galway Civic 
+					Trust in the past sixteen years, this publication is another initiative in Constructively Caring 
+					for Your Local Heritage. The Directors of Dúchas na Gaillimhe hope that young people, parents and teachers will use this guide on visits to the city and perhaps enjoy a picnic along the way. For further details of the work of the Trust, please visit www. galwaycivictrust.ie.
+					A special word of thanks goes to our Development Officer, Michael Quinn, who undertook this 
+					project and brought it to completion. Thanks also to Fáilte Ireland West for generous sponsorship, 
+					which enables us to present this booklet free of charge.
+					<br><br>
+					<b>Delo Collier</b>
+					<br><br>
+					Chair, Dúchas na Gaillimhe – Galway Civic Trust.
+				</p>
+
+			  </div>
+		   </div>
+          </ion-slide>
+		  <ion-slide class="has-header">
+            <div class="list card" style="max-height:calc(100vh - 110px);">
+			  <div style="text-align:center;" class="item">
+				<h2>Introduction</h2>
+			  </div>
+			  <div class="item item-body" style="max-height:calc(100vh - 175px);">
+				<img class="full-image" src="img/map.jpg">
+				<p>
+					 The River Corrib starts its voyage just north of Galway city, where it flows from the lake 
+					 of the same name – Lough Corrib. At 176 square kilometres this is Ireland’s second largest 
+					 lake: it extends north to the towns of Headford and Cong, while westward it stretches into 
+					 the Connemara region. From here the river meanders along its six kilometre journey, picking 
+					 up speed as it enter the city on its way to empty into the mighty Atlantic Ocean.
+					 <br><br>
+					 The Corrib has long been the main artery of the city and as far back as the Stone Age its banks were 
+					 home to some of the earliest settlers in Ireland, who valued its abundant supply of salmon and trout. 
+					 Right through the Bronze and Iron Ages up to the arrival of Christianity in the fifth century the 
+					 Corrib supported human habitation, and much of our archaeological evidence from these periods stems 
+					 from the remains of settlements along the river or indeed from artefacts found in its waters. In 
+					 fact the flooding of the area by the Corrib at times of high water gave rise to the early Gaelic 
+					 name for Galway – Baile na Sruthán (the village of the streams) – as small islands surrounded by 
+					 rivulets were formed on the site of the modern city. The present name of Galway is also thought to 
+					 be closely associated with the River Corrib. According to mythology, Galvia, daughter of King Breasil, 
+					 threw herself into the Corrib and it is from her that the city derives its name.
+					 <br><br>
+					 With the arrival of the Anglo-Normans in the medieval period the original settlement began to grow. 
+					 In the thirteenth century the de Burgo family found that with the natural defences of the sea to the 
+					 south and the river to the west, the area could easily be secured. As the town began to take to shape 
+					 and expand under the fourteen Anglo-Norman ‘Tribes’, the River Corrib remained an important defensive 
+					 barrier while its waters became a valuable source of fishing revenue during the sixteenth and seventeenth centuries.
+					<br><br>
+					 By the ninteenth century, the Corrib was being utilised to power the many mills which had been erected along 
+					 its banks – it being noted by a visitor to the city that the river’s ‘mighty volume of water would 
+					 turn all the mills in Manchester’. Though Galway and the wider country were experiencing a period of 
+					 decline at this time, the water-powered mini ‘industrial revolution’ which the city embraced undoubtedly 
+					 helped to maintain a degree of local economic stability throughout an otherwise bleak period. In the 
+					 twentieth century the Corrib became associated with sports and recreation as it frequently hosted highly 
+					 popular rowing competitions and regattas. As tourism increased, leisure cruises up to Lough Corrib also 
+					 became fashionable among the gentry.
+					 <br><br>
+					 Today, the natural, historic and social features of the River Corrib still manage to charm both residents 
+					 and visitors. The sight of a fisherman hooking a salmon commonly halts and fascinates passers-by on 
+					 Salmon Weir Bridge, while a leisurely stroll along some of the city’s more secluded backwaters is a 
+					 perfect retreat from the hum of the modern city and is an ideal opportunity to view the flora and 
+					 fauna for which the Corrib and its associated waterways are home. So come with us as we take in the 
+					 many pleasures of the city’s river systems on <b>The Galway City Waterways Walk.</b>
+				</p>
+			  </div>
+		   </div>
+          </ion-slide>
+		  </ion-slide>
+		  <ion-slide class="has-header">
+            <div class="list card" style="max-height:calc(100vh - 110px);">
+			  <div style="text-align:center;" class="item">
+				<h2>Acknowledgements</h2>
+			  </div>
+			  <div class="item item-body" style="max-height:calc(100vh - 175px);">
+				<p>
+					 The compilation of this booklet has been assisted by a number of people to whom a debt of 
+					 gratitude is owed. Firstly, to Gordon D’Arcy who compiled a previous waterway guide for 
+					 Galway Civic Trust. In fact, Gordon’s brochure was the inspiration for this booklet and 
+					 much of his original text concerning wildlife and ecology has been reproduced in this 
+					 publication. Advice and images for the booklet were also gratefully received from Brendan 
+					 Smith of the Natural Environment and Waterways Group (of which Galway Trust is also a member). 
+					 This strategic policy group which operates under the auspices of the Council’s Galway City 
+					 Development Board is dedicated to the protection and promotion of the city’s natural amenities. 
+					 Indeed, a collaborative effort between NEWG and Galway Civic Trust – to rename a number of 
+					 the city’s watercourses – became the catalyst for the research of this work.
+					 <br><br>
+					 Thanks are also due to Paul Duffy and Seamus Hartigan for their respective factual amendments, 
+					 as well as to Dr Mark McCarthy of GMIT and Professor Noel Wilkins of NUIG for their patient 
+					 and diligent proof-reading of the text. A number of photographs by Ronan Bree which appear 
+					 on the cover and in the interior did much to enhance this booklet and to him I am deeply 
+					 indebted. More of Ronan’s work can be found at www. ronanbree.com. Other photographs were 
+					 also kindly supplied by Neil Warner, Sean McCormack and Frank Clarke.
+					 <br><br>
+					 Credit is due to Ray O’Donnell and Darina McCarthy of Tela Design for their original ideas and 
+					 design of the booklet. The assistance of staff at the Galway County Library and those at the 
+					 photographic archive of the National Library of Ireland is also duly acknowledged. A special 
+					 word of thanks, finally, to the Board of Directors of Galway Civic Trust who encouraged this 
+					 project from the outset.
+					<br><br>
+					 <b>Michael Quinn, Development Officer</b>
+					 <br>
+					 Dúchas na Gaillimhe – Galway Civic Trust
+				</p>
+			  </div>
+		   </div>
+          </ion-slide>
+        </ion-slide-box>
+      </ion-view>
